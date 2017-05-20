@@ -8,14 +8,15 @@
     tools:context="com.google.android.gms.samples.vision.barcodereader.MainActivity">
 
     <TextView
+        android:id="@+id/status_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/barcode_header"
-        android:id="@+id/status_message"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/barcode_header"
+        android:textAlignment="center"
+        android:textSize="36sp" />
 
     <TextView
         android:layout_width="wrap_content"
