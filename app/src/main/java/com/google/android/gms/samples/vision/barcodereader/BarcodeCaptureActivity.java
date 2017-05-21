@@ -360,8 +360,6 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
             Intent data = new Intent(this, BarcodeResultActivity.class);
             data.putExtra(BarcodeObject, best);
             startActivity(data);
-            //setResult(CommonStatusCodes.SUCCESS, data);
-            //finish();
             return true;
         }
         return false;
