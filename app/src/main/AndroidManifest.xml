@@ -13,7 +13,7 @@
         android:fullBackupContent="false"
         android:hardwareAccelerated="true"
         android:icon="@drawable/icon"
-        android:label="Is this vegan?"
+        android:label="Palm Oil Checker"
         android:supportsRtl = "true"
         android:theme="@style/Theme.AppCompat" >
         <meta-data
@@ -22,7 +22,6 @@
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />
-
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main" >
@@ -32,12 +31,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".BarcodeCaptureActivity"
-            android:label="Read Barcode"/>
-
+            android:label="@string/title_activity_barcode_capture"
+            android:parentActivityName=".MainActivity">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".MainActivity" />
+        </activity>
         <activity android:name=".BarcodeResultActivity"
-            android:label="Is this vegan?"/>
+            android:label="@string/title_activity_barcode_result"
+        android:parentActivityName=".BarcodeResultActivity">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".BarcodeResultActivity" />
+        </activity>
     </application>
-
 </manifest>

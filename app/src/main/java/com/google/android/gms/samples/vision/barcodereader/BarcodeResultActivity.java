@@ -18,8 +18,6 @@ import java.net.URL;
 
 public class BarcodeResultActivity extends AppCompatActivity {
 
-    private Barcode barcode;
-    private String url;
     ProgressDialog pd;
     private TextView PalmOilResult;
 
@@ -27,10 +25,10 @@ public class BarcodeResultActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_barcode_result);
-        barcode = getIntent().getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
+        Barcode barcode = getIntent().getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
         PalmOilResult = (TextView)findViewById(R.id.palm_oil_result);
 
-        url = "https://world.openfoodfacts.org/api/v0/product/" + barcode.rawValue + ".json";
+        String url = "https://world.openfoodfacts.org/api/v0/product/" + barcode.rawValue + ".json";
 
         new JsonTask().execute(url);
     }

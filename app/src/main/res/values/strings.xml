@@ -4,8 +4,8 @@
     <string name="permission_camera_rationale">Access to the camera is needed for detection</string>
     <string name="no_camera_permission">This application cannot run because it does not have the camera permission.  The application will now exit.</string>
     <string name="low_storage_error">Face detector dependencies cannot be downloaded due to low device storage</string>
-    <string name="title_activity_main">Is this vegan?</string>
-    <string name="barcode_header">Is this vegan?</string>
+    <string name="title_activity_main">Palm Oil Checker</string>
+    <string name="barcode_header">Check if products are palm oil free</string>
     <string name="read_barcode">Read Barcode</string>
     <string name="auto_focus">Auto Focus</string>
     <string name="use_flash">Use Flash</string>
@@ -14,4 +14,6 @@
     <string name="barcode_error">"Error reading barcode: %1$s"</string>
     <string name="button">Button</string>
     <string name="palm_oil_tag">null</string>
+    <string name="title_activity_barcode_capture">Scan Barcode</string>
+    <string name="title_activity_barcode_result">Result</string>
 </resources>
