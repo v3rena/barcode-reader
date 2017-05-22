@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.JsonReader;
+import android.widget.TextView;
 
 import com.google.android.gms.vision.barcode.Barcode;
 
@@ -13,7 +14,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 public class BarcodeResultActivity extends AppCompatActivity {
@@ -21,12 +21,14 @@ public class BarcodeResultActivity extends AppCompatActivity {
     private Barcode barcode;
     private String url;
     ProgressDialog pd;
+    private TextView PalmOilResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_barcode_result);
         barcode = getIntent().getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
+        PalmOilResult = (TextView)findViewById(R.id.palm_oil_result);
 
         url = "https://world.openfoodfacts.org/api/v0/product/" + barcode.rawValue + ".json";
 
@@ -53,38 +55,13 @@ public class BarcodeResultActivity extends AppCompatActivity {
                 URL url = new URL(params[0]);
                 connection = (HttpURLConnection) url.openConnection();
                 connection.connect();
+                return connection.getInputStream();
 
-
-                InputStream stream = connection.getInputStream();
-
-                /*reader = new BufferedReader(new InputStreamReader(stream));
-
-                StringBuffer buffer = new StringBuffer();
-                String line = "";
-
-                while ((line = reader.readLine()) != null) {
-                    buffer.append(line+"\n");
-                    Log.d("Response: ", "> " + line);   //here u ll get whole response...... :-)
-
-                }*/
-
-                return stream;
-
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
                 if (connection != null) {
                     connection.disconnect();
-                }
-                try {
-                    if (reader != null) {
-                        reader.close();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
             }
             return null;
@@ -104,13 +81,51 @@ public class BarcodeResultActivity extends AppCompatActivity {
         }
 
         private void parseJSON(InputStream inputStream) throws IOException {
-            JsonReader reader = new JsonReader(new InputStreamReader(inputStream, "UTF-8"));
-            try {
-                //TODO: https://developer.android.com/reference/android/util/JsonReader.html
-                //return readMessagesArray(reader);
-            } finally {
+            try (JsonReader reader = new JsonReader(new InputStreamReader(inputStream, "UTF-8"))) {
+                int hasPalmoil = readItem(reader);
                 reader.close();
+                PalmOilResult.setText(String.valueOf(hasPalmoil));
             }
+        }
+
+        private int readItem(JsonReader reader) throws  IOException {
+            int hasPalmoil = 0;
+
+            reader.beginObject();
+            while (reader.hasNext()) {
+                String FirstName = reader.nextName();
+                if (FirstName.equals("product")) {
+                reader.beginObject();
+                    while (reader.hasNext()) {
+                        String name = reader.nextName();
+                        if (name.contains("palm_oil")) {
+                            hasPalmoil = reader.nextInt();
+                            if (hasPalmoil == 1) {
+                                reader.endObject();
+                                return hasPalmoil;
+                            }
+                        }
+                        else if (name.contains("ingredients_text")) {
+                            String ingredients = reader.nextString();
+                            if ((ingredients.contains("palm oil")) || (ingredients.contains("palm-oil")) || (ingredients.contains("palm_oil")) || (ingredients.contains("Palmöl"))) {
+                                hasPalmoil=1;
+                                //reader.endObject();
+                                return hasPalmoil;
+                            }
+                        }
+                        else {
+                            reader.skipValue();
+                        }
+                    }
+                    //Notwendig
+                    reader.endObject();
+                }
+                else {
+                    reader.skipValue();
+                }
+            }
+            reader.endObject();
+            return hasPalmoil;
         }
     }
 }
