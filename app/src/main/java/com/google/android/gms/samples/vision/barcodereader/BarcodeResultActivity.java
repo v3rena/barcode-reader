@@ -91,19 +91,19 @@ public class BarcodeResultActivity extends AppCompatActivity {
 
                 switch(hasPalmoil){
                     case 0:
-                        PalmOilResult.setText(String.valueOf(hasPalmoil));
+                        PalmOilResult.setText("This product is palm oil free");
                         ResultImage.setImageResource(R.drawable.check);
                         break;
                     case 1:
-                        PalmOilResult.setText(String.valueOf(hasPalmoil));
+                        PalmOilResult.setText("This product contains palm oil");
                         ResultImage.setImageResource(R.drawable.cross);
                         break;
                     case 404:
-                        PalmOilResult.setText(String.valueOf(hasPalmoil));
+                        PalmOilResult.setText("Product was not found");
                         ResultImage.setImageResource(R.drawable.search);
                         break;
                     default:
-                        PalmOilResult.setText(String.valueOf(hasPalmoil));
+                        PalmOilResult.setText("Ooops! Technical problems occured. Please try again.");
                         ResultImage.setImageResource(R.drawable.wrench);
                 }
             }
