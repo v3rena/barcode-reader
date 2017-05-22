@@ -12,7 +12,7 @@
         android:allowBackup="true"
         android:fullBackupContent="false"
         android:hardwareAccelerated="true"
-        android:icon="@drawable/icon"
+        android:icon="@drawable/earth"
         android:label="Palm Oil Checker"
         android:supportsRtl = "true"
         android:theme="@style/Theme.AppCompat" >

@@ -1,10 +1,12 @@
 package com.google.android.gms.samples.vision.barcodereader;
 
 import android.app.ProgressDialog;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.JsonReader;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.vision.barcode.Barcode;
@@ -20,6 +22,8 @@ public class BarcodeResultActivity extends AppCompatActivity {
 
     ProgressDialog pd;
     private TextView PalmOilResult;
+    private ImageView ResultImage;
+    private Drawable CrossPic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +31,8 @@ public class BarcodeResultActivity extends AppCompatActivity {
         setContentView(R.layout.activity_barcode_result);
         Barcode barcode = getIntent().getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
         PalmOilResult = (TextView)findViewById(R.id.palm_oil_result);
+        ResultImage = (ImageView)findViewById(R.id.result_image);
+
 
         String url = "https://world.openfoodfacts.org/api/v0/product/" + barcode.rawValue + ".json";
 
@@ -82,7 +88,24 @@ public class BarcodeResultActivity extends AppCompatActivity {
             try (JsonReader reader = new JsonReader(new InputStreamReader(inputStream, "UTF-8"))) {
                 int hasPalmoil = readItem(reader);
                 reader.close();
-                PalmOilResult.setText(String.valueOf(hasPalmoil));
+
+                switch(hasPalmoil){
+                    case 0:
+                        PalmOilResult.setText(String.valueOf(hasPalmoil));
+                        ResultImage.setImageResource(R.drawable.check);
+                        break;
+                    case 1:
+                        PalmOilResult.setText(String.valueOf(hasPalmoil));
+                        ResultImage.setImageResource(R.drawable.cross);
+                        break;
+                    case 404:
+                        PalmOilResult.setText(String.valueOf(hasPalmoil));
+                        ResultImage.setImageResource(R.drawable.search);
+                        break;
+                    default:
+                        PalmOilResult.setText(String.valueOf(hasPalmoil));
+                        ResultImage.setImageResource(R.drawable.wrench);
+                }
             }
         }
 
