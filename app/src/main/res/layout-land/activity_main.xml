@@ -12,38 +12,23 @@
         android:id="@+id/picture_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
         android:contentDescription="@string/earth_logo"
         android:src="@drawable/earth"
         android:visibility="visible"
         app:srcCompat="@drawable/earth"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="12dp" />
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:id="@+id/status_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/picture_main"
-        android:layout_marginBottom="25dp"
-        android:layout_marginStart="27dp"
-        android:layout_toEndOf="@+id/picture_main"
         android:text="@string/barcode_header"
         android:textAlignment="textStart"
-        android:textSize="36sp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/barcode_value"
-        android:layout_below="@+id/status_message"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="110dp"
-        android:layout_alignRight="@+id/status_message"
-        android:layout_alignEnd="@+id/status_message" />
+        android:textSize="36sp"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/picture_main"
+        android:layout_marginStart="26dp" />
 
     <Button
         android:layout_width="wrap_content"
@@ -67,9 +52,8 @@
         android:layout_height="wrap_content"
         android:text="@string/use_flash"
         android:id="@+id/use_flash"
-        android:layout_alignTop="@+id/auto_focus"
-        android:layout_alignRight="@+id/barcode_value"
-        android:layout_alignEnd="@+id/barcode_value"
-        android:checked="false" />
+        android:checked="false"
+        android:layout_above="@+id/read_barcode"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>
