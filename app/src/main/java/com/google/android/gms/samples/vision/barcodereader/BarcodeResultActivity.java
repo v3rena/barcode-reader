@@ -111,55 +111,78 @@ public class BarcodeResultActivity extends AppCompatActivity {
         }
 
         private int readItem(JsonReader reader) throws  IOException {
-            int hasPalmoil = 0;
+            int resultCode = 0;
             reader.beginObject();
             while (reader.hasNext()) {
-                String FirstName = reader.nextName();
-                if (FirstName.equals("product")) {
-                    reader.beginObject();
-                    while (reader.hasNext()) {
-                        if (reader.peek().equals(JsonToken.NAME)) {
-                            String name = reader.nextName();
-                            if (name.contains("palm_oil")) { //hier peek!
-                                hasPalmoil = reader.nextInt();
-                                if (hasPalmoil == 1) {
-                                    //reader.endObject();
-                                    //return hasPalmoil;
-                                    break;
-                                }
-                                else {
-                                    reader.skipValue();
-                                }
-                            }
-                            else if (name.contains("ingredients_text")) {
-                                String ingredients = reader.nextString();
-                                if ((ingredients.contains("palm oil")) || (ingredients.contains("palm-oil")) || (ingredients.contains("palm_oil")) || (ingredients.contains("Palmöl"))) {
-                                    hasPalmoil=1;
-                                    //reader.endObject();
-                                    //return hasPalmoil;
-                                    break;
-                                }
-                                else {
-                                    reader.skipValue();
-                                }
-                            }
-                            else {
-                                reader.skipValue();
+                if (reader.peek().equals(JsonToken.NAME)) {
+                    //
+                    String FirstName = reader.nextName();
+
+                    if(FirstName.equals("status")) {
+                        if (reader.peek().equals(JsonToken.NUMBER)) {
+                            int status = reader.nextInt();
+                            if (status == 0) {
+                                resultCode = 404;
+                                break;
                             }
                         }
                         else {
                             reader.skipValue();
                         }
                     }
-                    //Irgendwo endObject(), aber nicht hier?
-                    //reader.endObject();
+                    else if (FirstName.equals("product")) {
+                        reader.beginObject();
+                        while (reader.hasNext()) {
+                            if (reader.peek().equals(JsonToken.NAME)) {
+                                String name = reader.nextName();
+                                if (name.contains("palm_oil")) {
+                                    //
+                                    if (reader.peek().equals(JsonToken.NUMBER)) {
+                                        resultCode = reader.nextInt();
+                                        if (resultCode == 1) {
+                                            //reader.endObject();
+                                            //return resultCode;
+                                            break;
+                                        }
+                                    } else {
+                                        reader.skipValue();
+                                    }
+
+                                    //
+                                }
+                                else if (name.contains("ingredients_text")) {
+                                    //
+                                    if (reader.peek().equals(JsonToken.STRING)) {
+                                        String ingredients = reader.nextString();
+                                        if ((ingredients.contains("palm oil")) || (ingredients.contains("palm-oil")) || (ingredients.contains("palm_oil")) || (ingredients.contains("Palmöl"))) {
+                                            resultCode = 1;
+                                            //reader.endObject();
+                                            //return resultCode;
+                                            break;
+                                        }
+
+                                    }
+                                    else {
+                                        reader.skipValue();
+                                    }
+                                    //
+                                } else {
+                                    reader.skipValue();
+                                }
+                            } else {
+                                reader.skipValue();
+                            }
+                        }
+                        //Irgendwo endObject(), aber nicht hier?
+                        //reader.endObject();
+                    } else {
+                        reader.skipValue();
+                    }
                 }
-                else {
-                    reader.skipValue();
-                }
+                //
             }
-            reader.endObject();
-            return hasPalmoil;
+            //reader.endObject();
+            return resultCode;
         }
     }
 }
