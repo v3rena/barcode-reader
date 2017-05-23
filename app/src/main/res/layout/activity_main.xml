@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -15,30 +16,29 @@
         android:textAlignment="center"
         android:textAllCaps="false"
         android:textSize="36sp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/picture_main"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="74dp" />
+        android:layout_marginTop="33dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/read_barcode"
         android:id="@+id/read_barcode"
+        android:layout_marginBottom="24dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="70dp" />
+        android:layout_centerHorizontal="true" />
 
     <CheckBox
+        android:id="@+id/auto_focus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/auto_focus"
-        android:id="@+id/auto_focus"
-        android:checked="false"
         android:layout_above="@+id/read_barcode"
+        android:layout_marginBottom="24dp"
         android:layout_toLeftOf="@+id/read_barcode"
         android:layout_toStartOf="@+id/read_barcode"
-        android:layout_marginBottom="24dp" />
+        android:checked="true"
+        android:text="@string/auto_focus" />
 
     <CheckBox
         android:layout_width="wrap_content"
@@ -50,4 +50,15 @@
         android:layout_alignParentEnd="true"
         android:checked="false" />
 
+    <ImageView
+        android:id="@+id/picture_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:contentDescription="@string/earth_logo"
+        android:src="@drawable/earth"
+        android:visibility="visible"
+        app:srcCompat="@drawable/earth" />
 </RelativeLayout>

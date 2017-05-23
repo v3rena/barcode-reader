@@ -18,6 +18,7 @@
     <string name="title_activity_barcode_result">Result</string>
     <string name="result_text_palm_oil_free">This product is palm oil free</string>
     <string name="result_contains_palm_oil">This product contains palm oil</string>
-    <string name="result_product_not_found">Product was found</string>
-    <string name="result_technical_problems">Ooops! Technical problems occured. Please try again.</string>
+    <string name="result_product_not_found">Product not found</string>
+    <string name="result_technical_problems">Ooops! An error occured. Please try again.</string>
+    <string name="earth_logo">Earth Logo</string>
 </resources>

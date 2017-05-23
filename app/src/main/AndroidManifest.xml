@@ -15,7 +15,7 @@
         android:icon="@drawable/earth"
         android:label="Palm Oil Checker"
         android:supportsRtl = "true"
-        android:theme="@style/Theme.AppCompat" >
+        android:theme="@style/Theme.Design.Light" >
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
