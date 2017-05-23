@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.JsonReader;
+import android.util.JsonToken;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -117,26 +118,30 @@ public class BarcodeResultActivity extends AppCompatActivity {
                 if (FirstName.equals("product")) {
                     reader.beginObject();
                     while (reader.hasNext()) {
-                        String name = reader.nextName();
-                        System.out.println("verena"+name);
-                        if (name.contains("palm_oil")) {
-                            hasPalmoil = reader.nextInt();
-                            if (hasPalmoil == 1) {
-                                //reader.endObject();
-                                //return hasPalmoil;
-                                break;
+                        if (reader.peek().equals(JsonToken.NAME)) {
+                            String name = reader.nextName();
+                            if (name.contains("palm_oil")) { //hier peek!
+                                hasPalmoil = reader.nextInt();
+                                if (hasPalmoil == 1) {
+                                    //reader.endObject();
+                                    //return hasPalmoil;
+                                    break;
+                                }
+                                else {
+                                    reader.skipValue();
+                                }
                             }
-                            else {
-                                reader.skipValue();
-                            }
-                        }
-                        else if (name.contains("ingredients_text")) {
-                            String ingredients = reader.nextString();
-                            if ((ingredients.contains("palm oil")) || (ingredients.contains("palm-oil")) || (ingredients.contains("palm_oil")) || (ingredients.contains("Palmöl"))) {
-                                hasPalmoil=1;
-                                //reader.endObject();
-                                //return hasPalmoil;
-                                break;
+                            else if (name.contains("ingredients_text")) {
+                                String ingredients = reader.nextString();
+                                if ((ingredients.contains("palm oil")) || (ingredients.contains("palm-oil")) || (ingredients.contains("palm_oil")) || (ingredients.contains("Palmöl"))) {
+                                    hasPalmoil=1;
+                                    //reader.endObject();
+                                    //return hasPalmoil;
+                                    break;
+                                }
+                                else {
+                                    reader.skipValue();
+                                }
                             }
                             else {
                                 reader.skipValue();
@@ -145,10 +150,9 @@ public class BarcodeResultActivity extends AppCompatActivity {
                         else {
                             reader.skipValue();
                         }
-                        reader.skipValue();
                     }
-                    //Notwendig
-                    reader.endObject();
+                    //Irgendwo endObject(), aber nicht hier?
+                    //reader.endObject();
                 }
                 else {
                     reader.skipValue();
