@@ -91,19 +91,19 @@ public class BarcodeResultActivity extends AppCompatActivity {
 
                 switch(hasPalmoil){
                     case 0:
-                        PalmOilResult.setText("This product is palm oil free");
+                        PalmOilResult.setText(R.string.result_text_palm_oil_free);
                         ResultImage.setImageResource(R.drawable.check);
                         break;
                     case 1:
-                        PalmOilResult.setText("This product contains palm oil");
+                        PalmOilResult.setText(R.string.result_contains_palm_oil);
                         ResultImage.setImageResource(R.drawable.cross);
                         break;
                     case 404:
-                        PalmOilResult.setText("Product was not found");
+                        PalmOilResult.setText(R.string.result_product_not_found);
                         ResultImage.setImageResource(R.drawable.search);
                         break;
                     default:
-                        PalmOilResult.setText("Ooops! Technical problems occured. Please try again.");
+                        PalmOilResult.setText(R.string.result_technical_problems);
                         ResultImage.setImageResource(R.drawable.wrench);
                 }
             }
@@ -111,19 +111,23 @@ public class BarcodeResultActivity extends AppCompatActivity {
 
         private int readItem(JsonReader reader) throws  IOException {
             int hasPalmoil = 0;
-
             reader.beginObject();
             while (reader.hasNext()) {
                 String FirstName = reader.nextName();
                 if (FirstName.equals("product")) {
-                reader.beginObject();
+                    reader.beginObject();
                     while (reader.hasNext()) {
                         String name = reader.nextName();
+                        System.out.println("verena"+name);
                         if (name.contains("palm_oil")) {
                             hasPalmoil = reader.nextInt();
                             if (hasPalmoil == 1) {
-                                reader.endObject();
-                                return hasPalmoil;
+                                //reader.endObject();
+                                //return hasPalmoil;
+                                break;
+                            }
+                            else {
+                                reader.skipValue();
                             }
                         }
                         else if (name.contains("ingredients_text")) {
@@ -131,12 +135,17 @@ public class BarcodeResultActivity extends AppCompatActivity {
                             if ((ingredients.contains("palm oil")) || (ingredients.contains("palm-oil")) || (ingredients.contains("palm_oil")) || (ingredients.contains("Palmöl"))) {
                                 hasPalmoil=1;
                                 //reader.endObject();
-                                return hasPalmoil;
+                                //return hasPalmoil;
+                                break;
+                            }
+                            else {
+                                reader.skipValue();
                             }
                         }
                         else {
                             reader.skipValue();
                         }
+                        reader.skipValue();
                     }
                     //Notwendig
                     reader.endObject();
@@ -152,7 +161,15 @@ public class BarcodeResultActivity extends AppCompatActivity {
 }
 
 
-
+/*
+     if(FirstName.equals("status")) {
+                    int statusCode = reader.nextInt();
+                    if(statusCode == 0) {
+                        hasPalmoil = 404;
+                        return hasPalmoil;
+                    }
+                }
+ */
 
 
 
