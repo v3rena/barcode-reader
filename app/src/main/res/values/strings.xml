@@ -19,6 +19,9 @@
     <string name="result_text_palm_oil_free">This product is palm oil free</string>
     <string name="result_contains_palm_oil">This product contains palm oil</string>
     <string name="result_product_not_found">Product not found</string>
-    <string name="result_technical_problems">Ooops! An error occured. Please try again.</string>
+    <string name="result_technical_problems">Ooops! An error occurred. Please try again.</string>
     <string name="earth_logo">Earth Logo</string>
+    <string name="title_activity_product_detail">Product details</string>
+    <string name="show_details">Show Details</string>
+    <string name="result_text_info_not_available">Information not available</string>
 </resources>

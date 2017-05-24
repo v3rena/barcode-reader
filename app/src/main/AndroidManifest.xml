@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.google.android.gms.samples.vision.barcodereader"
-    android:installLocation="auto" >
+    android:installLocation="auto">
 
     <uses-feature android:name="android.hardware.camera" />
 
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -14,36 +14,46 @@
         android:hardwareAccelerated="true"
         android:icon="@drawable/earth"
         android:label="Palm Oil Checker"
-        android:supportsRtl = "true"
-        android:theme="@style/Theme.Design.Light" >
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Design.Light">
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />
+
         <activity
             android:name=".MainActivity"
-            android:label="@string/title_activity_main" >
+            android:label="@string/title_activity_main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".BarcodeCaptureActivity"
+        <activity
+            android:name=".BarcodeCaptureActivity"
             android:label="@string/title_activity_barcode_capture"
             android:parentActivityName=".MainActivity">
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value=".MainActivity" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
         </activity>
-        <activity android:name=".BarcodeResultActivity"
+        <activity
+            android:name=".BarcodeResultActivity"
             android:label="@string/title_activity_barcode_result"
-        android:parentActivityName=".BarcodeResultActivity">
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value=".BarcodeResultActivity" />
+            android:parentActivityName=".BarcodeCaptureActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".BarcodeCaptureActivity" />
+        </activity>
+        <activity android:name=".ProductDetailActivity"
+            android:label="@string/title_activity_product_detail"
+            android:parentActivityName=".BarcodeResultActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".BarcodeResultActivity" />
         </activity>
     </application>
+
 </manifest>
