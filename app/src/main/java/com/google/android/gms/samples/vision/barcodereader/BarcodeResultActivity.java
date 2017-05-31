@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.JsonReader;
 import android.util.JsonToken;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,6 +25,7 @@ public class BarcodeResultActivity extends AppCompatActivity implements View.OnC
     private TextView PalmOilResult;
     private ImageView ResultImage;
     private Barcode barcode;
+    private Button ShowDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,7 @@ public class BarcodeResultActivity extends AppCompatActivity implements View.OnC
         barcode = getIntent().getParcelableExtra(BarcodeObject);
         PalmOilResult = (TextView)findViewById(R.id.palm_oil_result);
         ResultImage = (ImageView)findViewById(R.id.result_image);
+        ShowDetails = (Button)findViewById(R.id.show_details);
         findViewById(R.id.show_details).setOnClickListener(this);
 
         String url = "https://world.openfoodfacts.org/api/v0/product/" + barcode.rawValue + ".json";
@@ -158,10 +161,10 @@ public class BarcodeResultActivity extends AppCompatActivity implements View.OnC
         private void setResult(int resultCode) {
             switch(resultCode){
                 case 0:
-                    setResultContainsPalmOil();
+                    setResultPalmOilFree();
                     break;
                 case 1:
-                    setResultPalmOilFree();
+                    setResultContainsPalmOil();
                     break;
                 case 404:
                     setResultProductNotFound();
@@ -175,18 +178,20 @@ public class BarcodeResultActivity extends AppCompatActivity implements View.OnC
         }
 
         private void setResultContainsPalmOil() {
-            PalmOilResult.setText(R.string.result_text_palm_oil_free);
-            ResultImage.setImageResource(R.drawable.check);
+            PalmOilResult.setText(R.string.result_contains_palm_oil);
+            ResultImage.setImageResource(R.drawable.cross);
         }
 
         private void setResultPalmOilFree() {
-            PalmOilResult.setText(R.string.result_contains_palm_oil);
-            ResultImage.setImageResource(R.drawable.cross);
+
+            PalmOilResult.setText(R.string.result_text_palm_oil_free);
+            ResultImage.setImageResource(R.drawable.check);
         }
 
         private void setResultProductNotFound() {
             PalmOilResult.setText(R.string.result_product_not_found);
             ResultImage.setImageResource(R.drawable.search);
+            ShowDetails.setVisibility(Button.GONE);
         }
 
         private void setResultInfoNotAvailable() {
@@ -197,6 +202,7 @@ public class BarcodeResultActivity extends AppCompatActivity implements View.OnC
         private void setResultError() {
             PalmOilResult.setText(R.string.result_technical_problems);
             ResultImage.setImageResource(R.drawable.wrench);
+            ShowDetails.setVisibility(Button.GONE);
         }
     }
 }

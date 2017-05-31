@@ -14,17 +14,22 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.google.android.gms.samples.vision.barcodereader.BarcodeCaptureActivity.BarcodeObject;
 
 public class ProductDetailActivity extends AppCompatActivity {
 
     private TextView ProductDetails;
+    private TextView DetailsHeadline;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
+        ProductDetails = (TextView)findViewById(R.id.show_details);
+        DetailsHeadline = (TextView)findViewById(R.id.details_headline);
         Barcode barcode = getIntent().getParcelableExtra(BarcodeObject);
         String url = "https://world.openfoodfacts.org/api/v0/product/" + barcode.rawValue + ".json";
         new JsonTask().execute(url);
@@ -61,54 +66,75 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         private void readJSON(InputStream inputStream) throws IOException {
             try (JsonReader reader = new JsonReader(new InputStreamReader(inputStream, "UTF-8"))) {
-                parseJSON(reader);
+                Map<String, String> results = parseJSON(reader);
                 reader.close();
+                printResult(results);
             }
         }
 
-        private void parseJSON(JsonReader reader) throws  IOException {
-            int resultCode = 0;
+        private Map<String, String> parseJSON(JsonReader reader) throws  IOException {
+            Map<String, String> results = new HashMap<String, String>();
             reader.beginObject();
-            loop:
             while (reader.hasNext()) {
                 if (reader.peek().equals(JsonToken.NAME)) {
                     String FirstName = reader.nextName();
                     switch (FirstName) {
-                        case "status":
-                            if (reader.peek().equals(JsonToken.NUMBER)) {
-                                int status = reader.nextInt();
-                                if (status == 0) {
-                                    resultCode = 404;
-                                    break loop;
-                                }
-                            } else {
-                                reader.skipValue();
-                            }
-                            break;
                         case "product":
                             reader.beginObject();
                             while (reader.hasNext()) {
                                 if (reader.peek().equals(JsonToken.NAME)) {
                                     String name = reader.nextName();
-                                    if (name.contains("palm_oil")) {
-                                        if (reader.peek().equals(JsonToken.NUMBER)) {
-                                            resultCode = reader.nextInt();
-                                            if (resultCode == 1) {
-                                                //reader.endObject();
-                                                //return resultCode;
-                                                break;
+                                    if (name.equals("product_name")) {
+                                        if (reader.peek().equals(JsonToken.STRING)) {
+                                            String productName = reader.nextString();
+                                            if (!results.containsKey("Name")) {
+                                                results.put("Name", productName);
                                             }
                                         } else {
                                             reader.skipValue();
                                         }
-                                    } else if (name.contains("ingredients_text")) {
+                                    }
+                                    else if (name.equals("traces")) {
                                         if (reader.peek().equals(JsonToken.STRING)) {
-                                            String ingredients = reader.nextString();
-                                            if ((ingredients.contains("palm oil")) || (ingredients.contains("palm-oil")) || (ingredients.contains("palm_oil")) || (ingredients.contains("Palmöl"))) {
-                                                resultCode = 1;
-                                                //reader.endObject();
-                                                //return resultCode;
+                                            String traces = reader.nextString();
+                                            if (!results.containsKey("Traces")) {
+                                                results.put("Traces", traces);
+                                            }
+                                        } else {
+                                            reader.skipValue();
+                                        }
+                                    }
+                                    else if (name.contains("ingredients_text")) {
+                                        switch (name) {
+                                            case "ingredients_text_de":
+                                                if (reader.peek().equals(JsonToken.STRING)) {
+                                                    String ingredients = reader.nextString();
+                                                    results.put("Ingredients", ingredients);
+                                                } else {
+                                                    reader.skipValue();
+                                                }
                                                 break;
+                                            case "ingredients_text":
+                                                if (reader.peek().equals(JsonToken.STRING)) {
+                                                    String ingredients = reader.nextString();
+                                                    if (!results.containsKey("Ingredients")) {
+                                                        results.put("Ingredients", ingredients);
+                                                    }
+                                                } else {
+                                                    reader.skipValue();
+                                                }
+                                                break;
+                                        }
+                                    }
+                                    else if (name.contains("palm_oil")) {
+                                        if (reader.peek().equals(JsonToken.NUMBER)) {
+                                            int resultCode = reader.nextInt();
+                                            if (!results.containsKey("Ingredients that may be from palm oil")) {
+                                                if (resultCode == 1) {
+                                                    results.put("Ingredients that may be from palm oil", "Yes");
+                                                } else if (resultCode == 0) {
+                                                    results.put("Ingredients that may be from palm oil", "No");
+                                                }
                                             }
                                         } else {
                                             reader.skipValue();
@@ -120,7 +146,6 @@ public class ProductDetailActivity extends AppCompatActivity {
                                     reader.skipValue();
                                 }
                             }
-                            //reader.endObject();
                             break;
                         default:
                             reader.skipValue();
@@ -128,7 +153,15 @@ public class ProductDetailActivity extends AppCompatActivity {
                     }
                 }
             }
-            //reader.endObject();
+            return results;
+        }
+
+        private void printResult(Map<String, String> results) {
+            DetailsHeadline.setText(results.get("Name"));
+            String ingredients = results.get("Ingredients");
+            String containsPalmoil = results.get("Ingredients that may be from palm oil");
+            String traces = results.get("Traces");
+            ProductDetails.setText(ingredients + "\n\n" + "Traces: "  + traces + "\n\n" + "Ingredients that may be from palm oil: " + containsPalmoil);
         }
     }
 }
