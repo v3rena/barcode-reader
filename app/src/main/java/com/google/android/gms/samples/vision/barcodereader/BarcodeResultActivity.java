@@ -180,29 +180,30 @@ public class BarcodeResultActivity extends AppCompatActivity implements View.OnC
         private void setResultContainsPalmOil() {
             PalmOilResult.setText(R.string.result_contains_palm_oil);
             ResultImage.setImageResource(R.drawable.cross);
+            ShowDetails.setVisibility(Button.VISIBLE);
         }
 
         private void setResultPalmOilFree() {
 
             PalmOilResult.setText(R.string.result_text_palm_oil_free);
             ResultImage.setImageResource(R.drawable.check);
+            ShowDetails.setVisibility(Button.VISIBLE);
         }
 
         private void setResultProductNotFound() {
             PalmOilResult.setText(R.string.result_product_not_found);
             ResultImage.setImageResource(R.drawable.search);
-            ShowDetails.setVisibility(Button.GONE);
         }
 
         private void setResultInfoNotAvailable() {
             PalmOilResult.setText(R.string.result_text_info_not_available);
-            ResultImage.setImageResource(R.drawable.wrench);
+            ResultImage.setImageResource(R.drawable.search);
+            ShowDetails.setVisibility(Button.VISIBLE);
         }
 
         private void setResultError() {
             PalmOilResult.setText(R.string.result_technical_problems);
             ResultImage.setImageResource(R.drawable.wrench);
-            ShowDetails.setVisibility(Button.GONE);
         }
     }
 }

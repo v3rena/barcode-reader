@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.JsonReader;
 import android.util.JsonToken;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.vision.barcode.Barcode;
@@ -23,6 +24,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     private TextView ProductDetails;
     private TextView DetailsHeadline;
+    private Button ShowDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,11 +159,35 @@ public class ProductDetailActivity extends AppCompatActivity {
         }
 
         private void printResult(Map<String, String> results) {
-            DetailsHeadline.setText(results.get("Name"));
+
+            String headline = results.get("Name");
+            if(headline != null) {
+                DetailsHeadline.setText(headline);
+            }
+            else {
+                DetailsHeadline.setText(R.string.name_not_available);
+            }
+
+            String detailsText = "Ingredients: ";
             String ingredients = results.get("Ingredients");
+            if(ingredients != null) {
+                detailsText = detailsText + ingredients + "\n\n";
+            }
+            else {
+                detailsText = detailsText + "\n\n";
+            }
             String containsPalmoil = results.get("Ingredients that may be from palm oil");
+            if (containsPalmoil != null) {
+                detailsText = detailsText + "Contains ingredients that may be from palm oil: " + containsPalmoil + "\n\n";
+            }
             String traces = results.get("Traces");
-            ProductDetails.setText(ingredients + "\n\n" + "Traces: "  + traces + "\n\n" + "Ingredients that may be from palm oil: " + containsPalmoil);
+            if(traces != null) {
+                detailsText = detailsText + "Traces: " + traces + "\n\n";
+            }
+            else {
+                detailsText = detailsText + "Traces: " + "\n\n";
+            }
+            ProductDetails.setText(detailsText);
         }
     }
 }

@@ -24,4 +24,5 @@
     <string name="title_activity_product_detail">Product details</string>
     <string name="show_details">Show Details</string>
     <string name="result_text_info_not_available">Information not available</string>
+    <string name="name_not_available">Name not available</string>
 </resources>
